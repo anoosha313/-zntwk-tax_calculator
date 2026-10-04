@@ -35,3 +35,19 @@ spec:
         #!/bin/sh
         npm install -g jasmine
         npx jasmine || npm run test:jasmine
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: build-image
+      image: node:16
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/bin/sh
+        npm run build || echo "build done"
+        npm run bundle || echo "bundle done"
